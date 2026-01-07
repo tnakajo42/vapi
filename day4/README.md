@@ -45,11 +45,60 @@ Twilio: https://www.twilio.com/ja-jp
 
 4. インポートが成功すると、Vapi上にその番号が一覧表示されます。
 
-## Twillio で API キーの発行
+### どのAIを出るかの設定
 
-https://console.twilio.com/us1/account/keys-credentials/api-keys/create
+1. インポートした番号をクリック (Twilio - fukui)
+2. 「Inbound Settings」の項目（どのアシスタントが着信に出るか）を、自分が作った Assistant に設定（今回はRiley）
+3. 保存
 
+これで「その番号に着信が来たら、このAssistantを起動する」というルールが Vapi 側で用意されます。
+
+ちなみに、Squad（任意）は、チームのような概念。
+複数Assistantをまとめて動かしたい時に使う機能。
+
+例：
+- 営業用AI
+- サポート用AI
+
+を順番に回したい／分岐したい場合など。単一AssistantでOKなら不要です。また、警告っぽく見えるけど “機能説明” なだけです。
+
+Workflow（任意）は、着信フローをカスタムしたい場合だけ使います。
+
+例：
+- 営業時間外 → 留守電
+- 最初だけIVR（1番→AI、2番→人間）
+- SMS送信
+
+などをやりたい時。ただのAI電話なら不要です。
+
+Fallback Destination（任意）は、AIが出られなかった場合の転送先です。
+
+記入例：
+- 自分の携帯
+- オフィス電話
+- 別のTwilio番号
+
+入れなくても問題ないですが、実運用では入れておくと安心です。
+
+### アシスタントをカスタマイズ
+
+デフォルトの Riley を使いたくない場合は、assistants から、Create Assistant で追加可能ですし、Riley の System Prompt などを変えても面白いと思います。
+
+## Twilio 側で着信先をVapiに指定
+
+Twilioの番号設定で「電話がかかってきたとき、どこに投げるか」を設定しないと、何も起こりません。
+
+下記の手順で、頑張って設定しましょう！
+
+1. [Twilio Console](https://console.twilio.com/) の左メニューの、Develop → Phone Numbers → Manage → Active Numbers をクリック
+2. あなたの番号をクリック
+3. Voice Configuration の、A call comes in を「Webhook」に変更
+4. Voice Configuration の、URL を「https://api.vapi.ai/twilio/inbound_call」に変更
+
+これで、あなたの番号に電話をかけてみてください。AIが対応すれば、大成功。
 
 ## 参考文献
 
-https://developers.cyberagent.co.jp/blog/archives/60442/
+Vapi公式「Twilio SIPトランク連携ガイド」: https://docs.vapi.ai/advanced/sip/twilio
+
+次世代音声基盤Vapiを試す：https://developers.cyberagent.co.jp/blog/archives/60442/
