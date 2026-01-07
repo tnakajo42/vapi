@@ -113,6 +113,12 @@ Trial というエラーが電話で出てくる場合、同じ Active Numbers �
 2. 左メニューの「Payment Settings」の「Payment Methods」からクレジットカード番号を選択。
 3. 「Delete payment method」で削除できます。
 
+※デフォルトでは、自動で追加支払いがされてしまうため、を削除できない場合はまず「[auto recharge settings](https://console.twilio.com/us1/billing/manage-billing/payment-settings)」から解約しましょう。
+
+クレジットカードも解約して、下記の画面になっていればOKです。
+
+![no-payment-settings](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/no-payment-settings.png)
+
 ## 参考文献
 
 Vapi公式「Twilio SIPトランク連携ガイド」: https://docs.vapi.ai/advanced/sip/twilio
