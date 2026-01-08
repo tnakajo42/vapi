@@ -135,6 +135,16 @@ Twilioの番号設定で「電話がかかってきたとき、どこに投げ�
 
 ※Twilioのデフォルトは、Trial版なため、実際に運用する場合はアップグレードが必要です。
 
+## AIと会話してみよう
+
+VAPIの右上の緑色のボタン「Talk to assistant」から、設定しているAIと電話ができます。
+
+ここで、実際にAIと会話ができるか試してみてください。
+
+![talk-to-assistant](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/talk-to-assistant.png)
+
+しっかり会話ができればOKです。
+
 # 【できる人はやってみよう】本番環境の実装（AIが電話応答）
 
 電話をかけて、Trial というエラーが電話で出てくる場合、同じ Active Numbers のページの Calls Log を見てみましょう。
