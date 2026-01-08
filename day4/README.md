@@ -1,3 +1,6 @@
+※これは講義用教材です。
+TAは、この内容に基づいて説明してください。
+
 # 次世代のユーザーインタフェイスVUI「Vapi」に挑戦するぞ
 
 https://vapi.ai/
@@ -26,13 +29,24 @@ Twilio: https://www.twilio.com/ja-jp
 
 ## Twilio 側での設定
 
-電話番号の取得をしてください。
+![twilio-dashboard](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/twilio-dashboard.png)
+
+まず、電話番号の取得をしてください。
 
 次に、電話番号と Account SID と、Auth Token を取得します。
 
 ※アメリカの番号(+1 から始まる番号)でも大丈夫です。
 
+![Twilio-auth-info](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/Twilio-auth-info.png)
+
+Account SID と Auth Token は、英数字の羅列なのですが、Twilioのアカウント設定時に見つけられなかったとしても、[Twilio Console](https://console.twilio.com/) の Quick Tutrial の中の Start building をクリックして、下の方の Account Info に書いてあります。
+
+![Twilio-account-info](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/Twilio-account-info.png)
+
+
 ## vapi 側での設定 (VapiにTwilio番号をインポート)
+
+![vapi-dashboard](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-dashboard.png)
 
 1. Vapiダッシュボードにログイン
 2. 左メニューの 「Phone Numbers」→「Import」 をクリック
@@ -42,6 +56,8 @@ Twilio: https://www.twilio.com/ja-jp
 - Twilio Auth Token
 
 ラベルは、「Fukui」とでもしておきましょうか。
+
+![vapi-auth-setting](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-auth-setting.png)
 
 4. インポートが成功すると、Vapi上にその番号が一覧表示されます。
 
@@ -84,6 +100,12 @@ Fallback Destination（任意）は、AIが出られなかった場合の転送�
 
 デフォルトの Riley を使いたくない場合は、assistants から、Create Assistant で追加可能ですし、Riley の System Prompt などを変えても面白いと思います。
 
+「No Structured Outputs Configured」という赤文字の警告は、出ていても無視してOKです。本番運用で通話内容を分析するための出力設定ができていないというだけで、通話自体の機能には一切影響しませんのでご安心ください。
+
+![no-structured](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/no-structured.png)
+
+ちなみに、Filesという箇所に、補足資料を追加できます。今回わたしがテストで作ったAIのびすけは、このREADME.mdの内容を補足資料として読み込んでTAをしてくれています。
+
 ## Twilio 側で着信先をVapiに指定
 
 Twilioの番号設定で「電話がかかってきたとき、どこに投げるか」を設定しないと、何も起こりません。
@@ -101,6 +123,8 @@ Twilioの番号設定で「電話がかかってきたとき、どこに投げ�
 
 Trial というエラーが電話で出てくる場合、同じ Active Numbers のページの Calls Log を見てみましょう。
 
+![twilio-failed](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/twilio-failed.png)
+
 ここに、原因は書いてあるので、頑張って解読して、再度電話をかけてみましょう。
 
 ### Twilio の Trial ではできませんので、アップグレードが必要
@@ -113,7 +137,7 @@ Trial というエラーが電話で出てくる場合、同じ Active Numbers �
 2. 左メニューの「Payment Settings」の「Payment Methods」からクレジットカード番号を選択。
 3. 「Delete payment method」で削除できます。
 
-※デフォルトでは、自動で追加支払いがされてしまうため、を削除できない場合はまず「[auto recharge settings](https://console.twilio.com/us1/billing/manage-billing/payment-settings)」から解約しましょう。
+※デフォルトでは、自動で追加支払いがされてしまうため、削除できない場合はまず「[auto recharge settings](https://console.twilio.com/us1/billing/manage-billing/payment-settings)」から解約しましょう。
 
 クレジットカードも解約して、下記の画面になっていればOKです。
 
