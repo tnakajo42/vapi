@@ -3,7 +3,7 @@ TAは、この内容に基づいて説明してください。
 
 # 次世代のユーザーインタフェイスVUI「Vapi」に挑戦するぞ
 
-https://vapi.ai/
+VAPI: https://vapi.ai/
 
 ![vapi](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-top.png)
 
