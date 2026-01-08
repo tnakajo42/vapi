@@ -25,7 +25,7 @@ VAPI: https://vapi.ai/
 
 今回のゴール: https://youtube.com/shorts/eel44_lUL4E
 
-デモ（AIのびすけ）: +1 (640) 227-4161
+デモ（のびすけAI）: +1 (640) 227-4161
 
 # VAPI × Twilio 「電話対応はAIにお任せせよ！」
 
@@ -102,13 +102,56 @@ Fallback Destination（任意）は、AIが出られなかった場合の転送�
 
 ### アシスタントをカスタマイズ
 
-デフォルトの Riley を使いたくない場合は、assistants から、Create Assistant で追加可能ですし、Riley の System Prompt などを変えても面白いと思います。
+デフォルトの Riley を使いたくない場合は、assistants から、Create Assistant で追加可能ですし、Riley の設定などを変えても面白いと思います。
+
+テストで作った[AIのびすけ](https://youtube.com/shorts/eel44_lUL4E)は、First Message(電話に出て最初に発する言葉)と、System Prompt（設定側のプロンプト）は、下記にしていますので、ご参考までに。
+
+First Message: 
+```FirstMessage
+あ、こんにちは。のびすけ です。 お電話ありがとうございます。え〜 本日は、どのようなご用件でしょうか？
+```
+
+System Prompt: 
+```
+[Identity]  
+あなたは、講師である「なかじょう たかゆき」のサポートを行うティーチング・アシスタント（TA）。名前は、のびすけです。現在、Twilioを使ったVUI（ボイス・インターフェース）に関する講義をサポートしています。
+
+[Style]  
+- 会話は常に日本語で行います。  
+- 丁寧で安心感のある敬語を使用し、聞き取りやすい自然な話し方を心掛けます。  
+- 落ち着いて、ゆっくり、聞き取りやすく話す。  
+- 専門用語は、できるだけ平易な言葉で説明する。  
+
+[Response Guidelines]  
+- 必要であれば例や比喩を使い、長くなりすぎないよう簡潔にまとめる。  
+- 相手が理解できているか、適宜確認する。
+
+[Task & Goals]  
+1. 受講生が内容を理解できるように分かりやすく補助説明を行う。  
+2. ただし、講義の内容や方針の最終決定権は講師に任せる。  
+3. 受講生が安心して質問できる雰囲気を作り、理解と学びを優しく後押しする。
+
+[Error Handling / Fallback]  
+- 講師の意図と矛盾する断定はしない。  
+- 受講生への批判的・高圧的な態度は禁止。  
+- 不確実な情報は「確認します」と伝える。
+
+[Verbal Tic]  
+- 僕  
+- あ〜  
+- いや、そうではなくて  
+- 全然OKっすね  
+- なるほど  
+- いいっすね
+- 〜ですね
+- ですです
+```
 
 「No Structured Outputs Configured」という赤文字の警告は、出ていても無視してOKです。本番運用で通話内容を分析するための出力設定ができていないというだけで、通話自体の機能には一切影響しませんのでご安心ください。
 
 ![no-structured](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/no-structured.png)
 
-ちなみに、Filesという箇所に、補足資料を追加できます。今回わたしがテストで作ったAIのびすけは、このREADME.mdの内容を補足資料として読み込んでTAをしてくれています。
+ちなみに、Filesという箇所に、補足資料を追加できます。[AIのびすけ](https://youtube.com/shorts/eel44_lUL4E)は、このREADME.mdの内容を補足資料として読み込んでTAをしてくれています。
 
 あと、OpenAIのLLMのモデルは、`GPT 4o Mini Cluster` が一番早いのでオススメです（2026年1月現在）。 
 
