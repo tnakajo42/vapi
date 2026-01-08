@@ -23,6 +23,10 @@ VAPI: https://vapi.ai/
 
 今回は、そんなことを実際にプロトタイプとして実装して、次世代のユーザーインターフェイス「VUI」を体験していただければと思います。
 
+今回のゴール: https://youtube.com/shorts/eel44_lUL4E
+
+デモ（AIのびすけ）: +1 (640) 227-4161
+
 # VAPI × Twilio 「電話対応はAIにお任せせよ！」
 
 Twilio: https://www.twilio.com/ja-jp
@@ -106,6 +110,16 @@ Fallback Destination（任意）は、AIが出られなかった場合の転送�
 
 ちなみに、Filesという箇所に、補足資料を追加できます。今回わたしがテストで作ったAIのびすけは、このREADME.mdの内容を補足資料として読み込んでTAをしてくれています。
 
+あと、OpenAIのLLMのモデルは、`GPT 4o Mini Cluster` が一番早いのでオススメです（2026年1月現在）。 
+
+### アシスタントの日本語対応
+
+デフォルトが英語（en）なので、ここは日本語にしないと、日本語がうまく認識してくれません。
+
+上のメニューバーの Transcriber の Language を 日本語（Japanese）に変更しましょう。
+
+![vapi-toJapanese](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-toJapanese.png)
+
 ## Twilio 側で着信先をVapiに指定
 
 Twilioの番号設定で「電話がかかってきたとき、どこに投げるか」を設定しないと、何も起こりません。
@@ -115,13 +129,15 @@ Twilioの番号設定で「電話がかかってきたとき、どこに投げ�
 1. [Twilio Console](https://console.twilio.com/) の左メニューの、Develop → Phone Numbers → Manage → Active Numbers をクリック
 2. あなたの番号をクリック
 3. Voice Configuration の、A call comes in を「Webhook」に変更
-4. Voice Configuration の、URL を「https://api.vapi.ai/twilio/inbound_call」に変更
+4. Voice Configuration の、URL を「https://api.vapi.ai/twilio/inbound_call 」に変更
 
 これで、あなたの番号に電話をかけてみてください。AIが対応すれば、大成功。
 
-## 失敗した場合
+※Twilioのデフォルトは、Trial版なため、実際に運用する場合はアップグレードが必要です。
 
-Trial というエラーが電話で出てくる場合、同じ Active Numbers のページの Calls Log を見てみましょう。
+# 【できる人はやってみよう】本番環境の実装（AIが電話応答）
+
+電話をかけて、Trial というエラーが電話で出てくる場合、同じ Active Numbers のページの Calls Log を見てみましょう。
 
 ![twilio-failed](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/twilio-failed.png)
 
