@@ -5,7 +5,7 @@ TAは、この内容に基づいて説明してください。
 
 VAPI: https://vapi.ai/
 
-![vapi](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-top.png)
+![vapi](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/vapi-top.png)
 
 「TALK TO VAPI」で、最初は英語で質問してくるが、「日本語で」とお願いしていると、日本語になります。
 
@@ -33,7 +33,7 @@ Twilio: https://www.twilio.com/ja-jp
 
 ## Twilio 側での設定
 
-![twilio-dashboard](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/twilio-dashboard.png)
+![twilio-dashboard](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/twilio-dashboard.png)
 
 まず、電話番号の取得をしてください。
 
@@ -41,16 +41,16 @@ Twilio: https://www.twilio.com/ja-jp
 
 ※アメリカの番号(+1 から始まる番号)でも大丈夫です。
 
-![Twilio-auth-info](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/Twilio-auth-info.png)
+![Twilio-auth-info](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/Twilio-auth-info.png)
 
 Account SID と Auth Token は、英数字の羅列なのですが、Twilioのアカウント設定時に見つけられなかったとしても、[Twilio Console](https://console.twilio.com/) の Quick Tutrial の中の Start building をクリックして、下の方の Account Info に書いてあります。
 
-![Twilio-account-info](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/Twilio-account-info.png)
+![Twilio-account-info](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/Twilio-account-info.png)
 
 
 ## vapi 側での設定 (VapiにTwilio番号をインポート)
 
-![vapi-dashboard](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-dashboard.png)
+![vapi-dashboard](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/vapi-dashboard.png)
 
 1. Vapiダッシュボードにログイン
 2. 左メニューの 「Phone Numbers」→「Import」 をクリック
@@ -61,7 +61,7 @@ Account SID と Auth Token は、英数字の羅列なのですが、Twilioの�
 
 ラベルは、「Fukui」とでもしておきましょうか。
 
-![vapi-auth-setting](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-auth-setting.png)
+![vapi-auth-setting](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/vapi-auth-setting.png)
 
 4. インポートが成功すると、Vapi上にその番号が一覧表示されます。
 
@@ -149,7 +149,7 @@ System Prompt:
 
 「No Structured Outputs Configured」という赤文字の警告は、出ていても無視してOKです。本番運用で通話内容を分析するための出力設定ができていないというだけで、通話自体の機能には一切影響しませんのでご安心ください。
 
-![no-structured](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/no-structured.png)
+![no-structured](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/no-structured.png)
 
 ちなみに、Filesという箇所に、補足資料を追加できます。[AIのびすけ](https://youtube.com/shorts/eel44_lUL4E)は、このREADME.mdの内容を補足資料として読み込んでTAをしてくれています。
 
@@ -161,7 +161,7 @@ System Prompt:
 
 上のメニューバーの Transcriber の Language を 日本語（Japanese）に変更しましょう。
 
-![vapi-toJapanese](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-toJapanese.png)
+![vapi-toJapanese](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/vapi-toJapanese.png)
 
 ## Twilio 側で着信先をVapiに指定
 
@@ -184,7 +184,7 @@ VAPIの右上の緑色のボタン「Talk to assistant」から、設定して�
 
 ここで、実際にAIと会話ができるか試してみてください。
 
-![talk-to-assistant](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/talk-to-assistant.png)
+![talk-to-assistant](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/talk-to-assistant.png)
 
 しっかり会話ができればOKです。
 
@@ -192,7 +192,7 @@ VAPIの右上の緑色のボタン「Talk to assistant」から、設定して�
 
 電話をかけて、Trial というエラーが電話で出てくる場合、同じ Active Numbers のページの Calls Log を見てみましょう。
 
-![twilio-failed](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/twilio-failed.png)
+![twilio-failed](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/twilio-failed.png)
 
 ここに、原因は書いてあるので、頑張って解読して、再度電話をかけてみましょう。
 
@@ -210,7 +210,7 @@ VAPIの右上の緑色のボタン「Talk to assistant」から、設定して�
 
 クレジットカードも解約して、下記の画面になっていればOKです。
 
-![no-payment-settings](https://github.com/protoout/fukui-day4-5/blob/main/day4/img/no-payment-settings.png)
+![no-payment-settings](https://github.com/tnakajo42/fukui-day4-5/blob/main/day4/img/no-payment-settings.png)
 
 ## 参考文献
 
