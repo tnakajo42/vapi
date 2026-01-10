@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>次世代のユーザーインタフェイスVUI「Vapi」に挑戦するぞ（講義用教材）</title>
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#111826;
+      --text:#e6edf3;
+      --muted:#9fb0c0;
+      --link:#77bdfb;
+      --border:#233244;
+      --codebg:#0a1220;
+      --accent:#3fb950;
+      --warn:#f0b429;
+      --danger:#f85149;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+      background: linear-gradient(180deg, var(--bg), #070a0e 60%);
+      color:var(--text);
+      line-height:1.75;
+    }
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 80px;
+    }
+    header{
+      background: rgba(17,24,38,.7);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 16px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(6px);
+    }
+    header h1{
+      margin:0 0 6px;
+      font-size: 22px;
+      line-height:1.35;
+    }
+    header .meta{
+      color:var(--muted);
+      font-size: 13px;
+    }
+    .badge{
+      display:inline-block;
+      font-size:12px;
+      padding:3px 10px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: rgba(63,185,80,.10);
+      color: #b7f7c5;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .note{
+      border:1px solid var(--border);
+      background: rgba(17,24,38,.6);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 16px 0;
+      color: var(--muted);
+    }
+    .note strong{color:var(--text)}
+    .warn{ border-left: 4px solid var(--warn); padding-left: 12px; }
+    .danger{ border-left: 4px solid var(--danger); padding-left: 12px; }
+
+    main{
+      background: rgba(17,24,38,.45);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 16px;
+    }
+    h2,h3,h4{ line-height:1.3; margin: 22px 0 10px; }
+    h2{ font-size: 20px; border-bottom:1px solid rgba(35,50,68,.7); padding-bottom:6px }
+    h3{ font-size: 17px }
+    h4{ font-size: 15px; color: #dbe7f3 }
+    p{ margin: 10px 0 }
+    a{ color:var(--link); text-decoration:none }
+    a:hover{ text-decoration: underline }
+    ul,ol{ margin: 8px 0 12px 22px }
+    li{ margin: 4px 0 }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Noto Sans Mono", "Courier New", monospace;
+      background: rgba(10,18,32,.65);
+      border: 1px solid rgba(35,50,68,.6);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d4e2f1;
+      font-size: .95em;
+    }
+    pre{
+      background: rgba(10,18,32,.85);
+      border:1px solid rgba(35,50,68,.85);
+      border-radius: 12px;
+      padding: 12px 12px;
+      overflow:auto;
+      margin: 10px 0 14px;
+    }
+    pre code{
+      background: transparent;
+      border: none;
+      padding: 0;
+      border-radius: 0;
+      color: #d4e2f1;
+      font-size: 13px;
+      white-space: pre;
+    }
+    figure{
+      margin: 14px 0;
+      padding: 12px;
+      background: rgba(10,18,32,.35);
+      border:1px solid rgba(35,50,68,.7);
+      border-radius: 12px;
+    }
+    figure img{
+      width:100%;
+      height:auto;
+      border-radius: 10px;
+      border:1px solid rgba(35,50,68,.7);
+      display:block;
+    }
+    figcaption{
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 14px;
+      text-align:center;
+    }
+    .kicker{ color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .callout{
+      border:1px solid var(--border);
+      background: rgba(17,24,38,.6);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 14px 0;
+    }
+
+    /* ========== 公式ウィジェット（右下固定） ========== */
+    .vapi-official-right {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 2147483000;
+    }
+
+    /* =========================================================
+       左下：html-script-tag が生成するボタンを “見た目だけ” 改造
+       重要：JSのクリック処理には一切触らない
+       ========================================================= */
+
+    /* ボタン自体（button#vapi-support-btn）を左下に固定 */
+    #vapi-support-btn{
+      position: fixed !important;
+      left: 18px !important;
+      bottom: 18px !important;
+      right: auto !important;
+      top: auto !important;
+      inset: auto !important;
+      transform: none !important;
+      margin: 0 !important;
+
+      width: 56px !important;
+      height: 56px !important;
+      border-radius: 999px !important;
+
+      /* ここが“ダサい”の主因なので、上品に */
+      background: radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,.35), rgba(255,255,255,0) 55%),
+                  linear-gradient(180deg, rgba(63,185,80,1), rgba(30,160,90,1)) !important;
+      border: 1px solid rgba(255,255,255,.18) !important;
+      box-shadow:
+        0 18px 45px rgba(0,0,0,.55),
+        0 6px 18px rgba(63,185,80,.28) !important;
+
+      cursor: pointer !important;
+      z-index: 2147483647 !important;
+      display: grid !important;
+      place-items: center !important;
+    }
+
+    /* hover */
+    #vapi-support-btn:hover{
+      filter: brightness(1.05) saturate(1.05) !important;
+      transform: translateY(-1px) !important;
+    }
+    #vapi-support-btn:active{
+      transform: translateY(0px) scale(.98) !important;
+    }
+
+    /* 中のアイコン（クリックを奪わない） */
+    #vapi-support-btn img{
+      width: 22px !important;
+      height: 22px !important;
+      pointer-events: none !important;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,.35));
+    }
+
+    /* ラベル（任意：消したければコメントアウト） */
+    #vapi-support-btn::after{
+      content: "質問する";
+      position: absolute;
+      left: 64px;
+      bottom: 50%;
+      transform: translateY(50%);
+      font-size: 12px;
+      color: rgba(230,237,243,.92);
+      background: rgba(17,24,38,.82);
+      border: 1px solid rgba(35,50,68,.9);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s ease;
+    }
+    #vapi-support-btn:hover::after{ opacity: 1; }
+
+    /* iPhone等のセーフエリア */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      #vapi-support-btn{
+        bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+        left: calc(18px + env(safe-area-inset-left)) !important;
+      }
+      .vapi-official-right{
+        bottom: calc(18px + env(safe-area-inset-bottom));
+        right: calc(18px + env(safe-area-inset-right));
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>次世代のユーザーインタフェイスVUI「Vapi」に挑戦するぞ</h1>
+      <div class="kicker">
+        VAPI: <a href="https://vapi.ai/" target="_blank" rel="noopener">https://vapi.ai/</a>
+      </div>
+    </header>
+
+    <main>
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-top.png?raw=1" alt="vapi" />
+        <figcaption>Vapi トップ画面</figcaption>
+      </figure>
+
+      <p>「TALK TO VAPI」で、最初は英語で質問してくるが、「日本語で」とお願いしていると、日本語になります。</p>
+
+      <h2>はじめに</h2>
+
+      <p>今回の講座は、福井初公開どころか、日本初公開、いや世界初のVAPIを使った講義になります。</p>
+
+      <p>スマホの次のユーザーインターフェイスと期待されている、声のインタフェイスVUI『ボイス・ユーザーインターフェイス』</p>
+
+      <p>日本でも、最近はタクシーを呼ぶときに、裏側の声はAIが対応して、配車をしていると聞いたことがありますし、お店の予約などもAIが電話対応をして完了する時代はもうすぐそこに来ています。</p>
+
+      <p>また、Webサイトを見ていて、AIに聞いてみるというボタンはよく見ますが、ちょっとチャットするのは大変だったりします。それが、音声で対応してくれる、と言ったらどうでしょう？</p>
+
+      <p>今回は、そんなことを実際にプロトタイプとして実装して、次世代のユーザーインターフェイス「VUI」を体験していただければと思います。</p>
+
+      <div class="callout">
+        <p><strong>今回のゴール:</strong>
+          <a href="https://youtube.com/shorts/eel44_lUL4E" target="_blank" rel="noopener">https://youtube.com/shorts/eel44_lUL4E</a>
+        </p>
+        <p><strong>デモ（のびすけAI）:</strong> +1 (640) 227-4161</p>
+      </div>
+
+      <h2>VAPI × Twilio 「電話対応はAIにお任せせよ！」</h2>
+
+      <p>Twilio:
+        <a href="https://www.twilio.com/ja-jp" target="_blank" rel="noopener">https://www.twilio.com/ja-jp</a>
+      </p>
+
+      <h3>Twilio 側での設定</h3>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/twilio-dashboard.png?raw=1" alt="twilio-dashboard" />
+        <figcaption>Twilio Dashboard</figcaption>
+      </figure>
+
+      <p>まず、電話番号の取得をしてください。</p>
+      <p>次に、電話番号と Account SID と、Auth Token を取得します。</p>
+      <p>※アメリカの番号(+1 から始まる番号)でも大丈夫です。</p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/Twilio-auth-info.png?raw=1" alt="Twilio-auth-info" />
+        <figcaption>Twilio Auth Info</figcaption>
+      </figure>
+
+      <p>
+        Account SID と Auth Token は、英数字の羅列なのですが、Twilioのアカウント設定時に見つけられなかったとしても、
+        <a href="https://console.twilio.com/" target="_blank" rel="noopener">Twilio Console</a>
+        の Quick Tutrial の中の Start building をクリックして、下の方の Account Info に書いてあります。
+      </p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/Twilio-account-info.png?raw=1" alt="Twilio-account-info" />
+        <figcaption>Twilio Account Info</figcaption>
+      </figure>
+
+      <h3>vapi 側での設定 (VapiにTwilio番号をインポート)</h3>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-dashboard.png?raw=1" alt="vapi-dashboard" />
+        <figcaption>Vapi Dashboard</figcaption>
+      </figure>
+
+      <ol>
+        <li>Vapiダッシュボードにログイン</li>
+        <li>左メニューの 「Phone Numbers」→「Import」 をクリック</li>
+        <li>フォームに下記を入力したら「Import」</li>
+      </ol>
+      <ul>
+        <li>Phone number（Twilioの電話番号）</li>
+        <li>Twilio Account SID</li>
+        <li>Twilio Auth Token</li>
+      </ul>
+
+      <p>ラベルは、「Fukui」とでもしておきましょうか。</p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-auth-setting.png?raw=1" alt="vapi-auth-setting" />
+        <figcaption>Vapi Import 設定</figcaption>
+      </figure>
+
+      <p>4. インポートが成功すると、Vapi上にその番号が一覧表示されます。</p>
+
+      <h4>どのAIを出るかの設定</h4>
+      <ol>
+        <li>インポートした番号をクリック (Twilio - fukui)</li>
+        <li>「Inbound Settings」の項目（どのアシスタントが着信に出るか）を、自分が作った Assistant に設定（今回はRiley）</li>
+        <li>保存</li>
+      </ol>
+
+      <p>これで「その番号に着信が来たら、このAssistantを起動する」というルールが Vapi 側で用意されます。</p>
+
+      <div class="note warn">
+        <p><strong>補足（任意機能）</strong></p>
+        <p><strong>Squad（任意）</strong>は、チームのような概念。複数Assistantをまとめて動かしたい時に使う機能。</p>
+        <p>例：</p>
+        <ul>
+          <li>営業用AI</li>
+          <li>サポート用AI</li>
+        </ul>
+        <p>を順番に回したい／分岐したい場合など。単一AssistantでOKなら不要です。また、警告っぽく見えるけど “機能説明” なだけです。</p>
+
+        <p><strong>Workflow（任意）</strong>は、着信フローをカスタムしたい場合だけ使います。</p>
+        <ul>
+          <li>営業時間外 → 留守電</li>
+          <li>最初だけIVR（1番→AI、2番→人間）</li>
+          <li>SMS送信</li>
+        </ul>
+        <p>などをやりたい時。ただのAI電話なら不要です。</p>
+
+        <p><strong>Fallback Destination（任意）</strong>は、AIが出られなかった場合の転送先です。</p>
+        <p>記入例：</p>
+        <ul>
+          <li>自分の携帯</li>
+          <li>オフィス電話</li>
+          <li>別のTwilio番号</li>
+        </ul>
+        <p>入れなくても問題ないですが、実運用では入れておくと安心です。</p>
+      </div>
+
+      <h4>アシスタントをカスタマイズ</h4>
+
+      <p>デフォルトの Riley を使いたくない場合は、assistants から、Create Assistant で追加可能ですし、Riley の設定などを変えても面白いと思います。</p>
+
+      <p>
+        テストで作った
+        <a href="https://youtube.com/shorts/eel44_lUL4E" target="_blank" rel="noopener">AIのびすけ</a>
+        は、First Message(電話に出て最初に発する言葉)と、System Prompt（設定側のプロンプト）は、下記にしていますので、ご参考までに。
+      </p>
+
+      <p><strong>First Message:</strong></p>
+      <pre><code class="language-text">あ、こんにちは。のびすけ です。 お電話ありがとうございます。え〜 本日は、どのようなご用件でしょうか？</code></pre>
+
+      <p><strong>System Prompt:</strong></p>
+      <pre><code class="language-text">[Identity]  
+あなたは、講師である「なかじょう たかゆき」のサポートを行うティーチング・アシスタント（TA）。名前は、のびすけです。現在、Twilioを使ったVUI（ボイス・インターフェース）に関する講義をサポートしています。
+
+[Style]  
+- 会話は常に日本語で行います。  
+- 丁寧で安心感のある敬語を使用し、聞き取りやすい自然な話し方を心掛けます。  
+- 落ち着いて、ゆっくり、聞き取りやすく話す。  
+- 専門用語は、できるだけ平易な言葉で説明する。  
+
+[Response Guidelines]  
+- 必要であれば例や比喩を使い、長くなりすぎないよう簡潔にまとめる。  
+- 相手が理解できているか、適宜確認する。
+
+[Task &amp; Goals]  
+1. 受講生が内容を理解できるように分かりやすく補助説明を行う。  
+2. ただし、講義の内容や方針の最終決定権は講師に任せる。  
+3. 受講生が安心して質問できる雰囲気を作り、理解と学びを優しく後押しする。
+
+[Error Handling / Fallback]  
+- 講師の意図と矛盾する断定はしない。  
+- 受講生への批判的・高圧的な態度は禁止。  
+- 不確実な情報は「確認します」と伝える。
+
+[Verbal Tic]  
+- 僕  
+- あ〜  
+- いや、そうではなくて  
+- 全然OKっすね  
+- なるほど  
+- いいっすね
+- 〜ですね
+- ですです</code></pre>
+
+      <p>「No Structured Outputs Configured」という赤文字の警告は、出ていても無視してOKです。本番運用で通話内容を分析するための出力設定ができていないというだけで、通話自体の機能には一切影響しませんのでご安心ください。</p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/no-structured.png?raw=1" alt="no-structured" />
+        <figcaption>No Structured Outputs Configured</figcaption>
+      </figure>
+
+      <p>
+        ちなみに、Filesという箇所に、補足資料を追加できます。
+        <a href="https://youtube.com/shorts/eel44_lUL4E" target="_blank" rel="noopener">AIのびすけ</a>
+        は、このREADME.mdの内容を補足資料として読み込んでTAをしてくれています。
+      </p>
+
+      <p>あと、OpenAIのLLMのモデルは、<code>GPT 4o Mini Cluster</code> が一番早いのでオススメです（2026年1月現在）。</p>
+
+      <h4>アシスタントの日本語対応</h4>
+
+      <p>デフォルトが英語（en）なので、ここは日本語にしないと、日本語がうまく認識してくれません。</p>
+      <p>上のメニューバーの Transcriber の Language を 日本語（Japanese）に変更しましょう。</p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/vapi-toJapanese.png?raw=1" alt="vapi-toJapanese" />
+        <figcaption>Transcriber Language を Japanese に変更</figcaption>
+      </figure>
+
+      <h3>Twilio 側で着信先をVapiに指定</h3>
+
+      <p>Twilioの番号設定で「電話がかかってきたとき、どこに投げるか」を設定しないと、何も起こりません。</p>
+      <p>下記の手順で、頑張って設定しましょう！</p>
+
+      <ol>
+        <li><a href="https://console.twilio.com/" target="_blank" rel="noopener">Twilio Console</a> の左メニューの、Develop → Phone Numbers → Manage → Active Numbers をクリック</li>
+        <li>あなたの番号をクリック</li>
+        <li>Voice Configuration の、A call comes in を「Webhook」に変更</li>
+        <li>Voice Configuration の、URL を「<code>https://api.vapi.ai/twilio/inbound_call</code>」に変更</li>
+      </ol>
+
+      <p>これで、あなたの番号に電話をかけてみてください。AIが対応すれば、大成功。</p>
+
+      <p class="note warn">※Twilioのデフォルトは、Trial版なため、実際に運用する場合はアップグレードが必要です。</p>
+
+      <h2>AIと会話してみよう</h2>
+
+      <p>VAPIの右上の緑色のボタン「Talk to assistant」から、設定しているAIと電話ができます。</p>
+      <p>ここで、実際にAIと会話ができるか試してみてください。</p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/talk-to-assistant.png?raw=1" alt="talk-to-assistant" />
+        <figcaption>Talk to assistant</figcaption>
+      </figure>
+
+      <p>しっかり会話ができればOKです。</p>
+
+      <h2>【できる人はやってみよう】本番環境の実装（AIが電話応答）</h2>
+
+      <p>電話をかけて、Trial というエラーが電話で出てくる場合、同じ Active Numbers のページの Calls Log を見てみましょう。</p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/twilio-failed.png?raw=1" alt="twilio-failed" />
+        <figcaption>Calls Log で失敗原因を見る</figcaption>
+      </figure>
+
+      <p>ここに、原因は書いてあるので、頑張って解読して、再度電話をかけてみましょう。</p>
+
+      <h3>Twilio の Trial ではできませんので、アップグレードが必要</h3>
+
+      <p>
+        現在、画面上部に「Trial: $XX.XXXX Upgrade」というボタンがあると思います。これは、まだクレジットカード等の支払い情報を登録していない無料トライアル期間であることを示しています。
+        Twilioは不正利用（国際電話詐欺など）を防ぐため、無料アカウントでは一部の日本の番号（特定の特殊番号やハイリスク判定された番号）への発信をブロックしています。
+        なので、画面上の 「Upgrade」 ボタンを押し、住所情報と支払い情報を登録して、アカウントを製品版にアップグレードしてください。
+      </p>
+
+      <p>
+        最初に20ドル必要ですが、アップグレードできたら、カード情報（支払いアイテム）は削除してしまっても構いません。この講座が終わったら、下記の手順で削除しましょう。
+      </p>
+
+      <ol>
+        <li><a href="https://console.twilio.com/" target="_blank" rel="noopener">Twilio Console</a> の右上の「Admin」の「Account billing」をクリック。</li>
+        <li>左メニューの「Payment Settings」の「Payment Methods」からクレジットカード番号を選択。</li>
+        <li>「Delete payment method」で削除できます。</li>
+      </ol>
+
+      <p class="note warn">
+        ※デフォルトでは、自動で追加支払いがされてしまうため、削除できない場合はまず
+        <a href="https://console.twilio.com/us1/billing/manage-billing/payment-settings" target="_blank" rel="noopener">auto recharge settings</a>
+        から解約しましょう。
+      </p>
+
+      <p>クレジットカードも解約して、下記の画面になっていればOKです。</p>
+
+      <figure>
+        <img src="https://github.com/protoout/fukui-day4-5/blob/main/day4/img/no-payment-settings.png?raw=1" alt="no-payment-settings" />
+        <figcaption>支払い情報が削除できている状態</figcaption>
+      </figure>
+
+      <div class="hr"></div>
+
+      <h2>参考文献</h2>
+      <ul>
+        <li>Vapi公式「Twilio SIPトランク連携ガイド」:
+          <a href="https://docs.vapi.ai/advanced/sip/twilio" target="_blank" rel="noopener">https://docs.vapi.ai/advanced/sip/twilio</a>
+        </li>
+        <li>次世代音声基盤Vapiを試す：
+          <a href="https://developers.cyberagent.co.jp/blog/archives/60442/" target="_blank" rel="noopener">https://developers.cyberagent.co.jp/blog/archives/60442/</a>
+        </li>
+      </ul>
+    </main>
+
+    <footer>© 2026 プロトアウト講義用教材</footer>
+  </div>
+
+  <!-- =========================================================
+       1) 左下ボタン（html-script-tag）← “動いてた版”そのまま
+       ========================================================= -->
+  <script>
+    const VAPI_PUBLIC_KEY = "***";
+    const VAPI_ASSISTANT_ID = "5d2ce9bc-3ac8-48eb-addc-7af2606dfacb";
+
+    let vapiInstance = null;
+
+    const buttonConfig = {};
+
+    (function (d, t) {
+      const g = document.createElement(t);
+      const s = d.getElementsByTagName(t)[0];
+
+      g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+      g.defer = true;
+      g.async = true;
+      s.parentNode.insertBefore(g, s);
+
+      g.onload = function () {
+        vapiInstance = window.vapiSDK.run({
+          apiKey: VAPI_PUBLIC_KEY,
+          assistant: VAPI_ASSISTANT_ID,
+          config: buttonConfig,
+        });
+        console.log("Custom green button initialized");
+      };
+    })(document, "script");
+  </script>
+
+  <!-- =========================================================
+       2) 公式ウィジェット（右下）
+       ========================================================= -->
+  <div class="vapi-official-right">
+    <vapi-widget
+      public-key="***"
+      assistant-id="5d2ce9bc-3ac8-48eb-addc-7af2606dfacb"
+      mode="voice"
+      size="compact"
+    ></vapi-widget>
+  </div>
+
+  <script
+    src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js"
+    async
+    type="text/javascript"
+  ></script>
+</body>
+</html>
