@@ -188,7 +188,7 @@ VAPIの右上の緑色のボタン「Talk to assistant」から、設定して�
 
 しっかり会話ができればOKです。
 
-# 【できる人はやってみよう】本番環境の実装（AIが電話応答）
+# 【できる人はやってみよう①】本番環境の実装（AIが電話応答）
 
 電話をかけて、Trial というエラーが電話で出てくる場合、同じ Active Numbers のページの Calls Log を見てみましょう。
 
@@ -211,6 +211,12 @@ VAPIの右上の緑色のボタン「Talk to assistant」から、設定して�
 クレジットカードも解約して、下記の画面になっていればOKです。
 
 ![no-payment-settings](https://github.com/tnakajo42/vapi/blob/main/day4/img/no-payment-settings.png)
+
+# 【できる人はやってみよう②】WebサイトにAIコールボタンを実装（チャットではなくボイスでAIが応答）
+
+YouTubeで解説しています: https://www.youtube.com/watch?v=8tRyf5AC_nc
+
+[![vapi-youtube](https://github.com/tnakajo42/vapi/blob/main/day4/img/vapi-youtube.png)](https://www.youtube.com/watch?v=8tRyf5AC_nc)
 
 ## 参考文献
 
