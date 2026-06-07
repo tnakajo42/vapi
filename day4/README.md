@@ -216,7 +216,7 @@ VAPIの右上の緑色のボタン「Talk to assistant」から、設定して�
 
 YouTubeで解説しています: https://www.youtube.com/watch?v=8tRyf5AC_nc
 
-[![vapi-youtube](https://github.com/tnakajo42/vapi/blob/main/day4/img/vapi-youtube.png)](https://www.youtube.com/watch?v=8tRyf5AC_nc)
+[![vapi-youtube](https://github.com/protoout/vapi/blob/main/day4/img/vapi-youtube.png)](https://www.youtube.com/watch?v=8tRyf5AC_nc)
 
 ## 参考文献
 
